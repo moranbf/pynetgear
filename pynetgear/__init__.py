@@ -49,6 +49,18 @@ class Netgear(object):
 
         return self.logged_in
 
+    def enable_config(self):
+        success, response = self._make_request(
+            ACTION_ENABLE_CONFIG,
+            SOAP_ENABLE_CONFIG.format(session_id=SESSION_ID))
+        return response
+
+    def disable_config(self):
+        success, response = self._make_request(
+            ACTION_DISABLE_CONFIG,
+            SOAP_DISABLE_CONFIG)
+        return response
+
     def get_attached_devices(self):
         """
         Return list of connected devices to the router.
@@ -278,6 +290,8 @@ ACTION_GET_ATTACHED_DEVICES = \
     "urn:NETGEAR-ROUTER:service:DeviceInfo:1#GetAttachDevice"
 ACTION_GET_TRAFFIC_METER = \
     "urn:NETGEAR-ROUTER:service:DeviceConfig:1#GetTrafficMeterStatistics"
+ACTION_ENABLE_CONFIG = "urn:NETGEAR-ROUTER:service:DeviceConfig:1#ConfigurationStarted"
+ACTION_DISABLE_CONFIG = "urn:NETGEAR-ROUTER:service:DeviceConfig:1#ConfigurationFinished"
 ACTION_ENABLE_GUEST_WIFI = \
  "SOAPAction: urn:NETGEAR-ROUTER:service:WLANConfiguration:1#SetGuestAccessEnabled2"
 ACTION_DISABLE_GUEST_WIFI = \
@@ -331,6 +345,34 @@ SOAP_TRAFFIC_METER = """
 <SOAP-ENV:Body>
 <M1:GetTrafficMeterStatistics\
 xmlns:M1="urn:NETGEAR-ROUTER:service:DeviceConfig:1"></M1:GetTrafficMeterStatistics>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+"""
+
+SOAP_ENABLE_CONFIG = """
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<SOAP-ENV:Envelope xmlns:SOAPSDK1="http://www.w3.org/2001/XMLSchema" xmlns:SOAPSDK2="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAPSDK3="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+<SOAP-ENV:Header>
+<SessionID>{session_id}</SessionID>
+</SOAP-ENV:Header>
+<SOAP-ENV:Body>
+<M1:ConfigurationStarted xmlns:M1="urn:NETGEAR-ROUTER:service:DeviceConfig:1">
+<NewSessionID>{session_id}</NewSessionID>
+</M1:ConfigurationStarted>
+</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>
+"""
+
+SOAP_DISABLE_CONFIG = """
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<SOAP-ENV:Envelope xmlns:SOAPSDK1="http://www.w3.org/2001/XMLSchema" xmlns:SOAPSDK2="http://www.w3.org/2001/XMLSchema-instance" xmlns:SOAPSDK3="http://schemas.xmlsoap.org/soap/encoding/" xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/">
+<SOAP-ENV:Header>
+<SessionID>{session_id}</SessionID>
+</SOAP-ENV:Header>
+<SOAP-ENV:Body>
+<M1:ConfigurationFinished xmlns:M1="urn:NETGEAR-ROUTER:service:DeviceConfig:1">
+<NewStatus>ChangesApplied</NewStatus>
+</M1:ConfigurationFinished>
 </SOAP-ENV:Body>
 </SOAP-ENV:Envelope>
 """
