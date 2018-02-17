@@ -21,6 +21,19 @@ Returns a list of named tuples describing the device signal, ip, name, mac, type
 **get_traffic_meter**<br>
 Return a dict containing the traffic meter information from the router (if enabled in the webinterface).
 
+
+**set_guest_wifi_enable(SSID,SSID_KEY)**<br>
+Enables the 2.4Ghz wifi, verified to work on a R7000
+
+**set_guest_wifi_disable()**<br>
+Disables the 2.4Ghz wifi, verified to work on a R7000
+
+**set_enable_config()**<br>
+Enables configuration mode
+
+**set_disable_config()**<br>
+Disable configuration mode
+
 Installation
 ------------
 
